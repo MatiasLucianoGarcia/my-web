@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ──────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  VIEWER
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ExperimentStatus {
+  IDEA
+  WIP
+  DONE
+  PAUSED
+}
+
+// ─── MODELS ──────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  pwHash    String
+  name      String
+  role      UserRole @default(ADMIN)
+  avatarUrl String?
+  bio       String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+  posts       Post[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id    String    @id @default(cuid())
+  name  String    @unique
+  slug  String    @unique
+  color String?
+  posts PostTag[]
+
+  @@map("tags")
+}
+
+model Post {
+  id             String     @id @default(cuid())
+  title          String
+  slug           String     @unique
+  excerpt        String?
+  content        String     @db.Text
+  coverImage     String?
+  status         PostStatus @default(DRAFT)
+  featured       Boolean    @default(false)
+  readingTime    Int?
+  publishedAt    DateTime?
+  metaTitle      String?
+  metaDescription String?
+  ogImage        String?
+  canonicalUrl   String?
+  authorId       String
+  author         User       @relation(fields: [authorId], references: [id])
+  categoryId     String?
+  category       Category?  @relation(fields: [categoryId], references: [id])
+  tags           PostTag[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([featured])
+  @@index([publishedAt])
+  @@map("posts")
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@map("post_tags")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  content     String?  @db.Text
+  coverImage  String?
+  liveUrl     String?
+  repoUrl     String?
+  featured    Boolean  @default(false)
+  status      String   @default("active")
+  stack       String[]
+  tags        String[]
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([featured])
+  @@map("projects")
+}
+
+model Experiment {
+  id          String           @id @default(cuid())
+  title       String
+  slug        String           @unique
+  description String
+  status      ExperimentStatus @default(IDEA)
+  stack       String[]
+  tags        String[]
+  demoUrl     String?
+  featured    Boolean          @default(false)
+  order       Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([slug])
+  @@map("experiments")
+}
+
+model Experience {
+  id          String    @id @default(cuid())
+  company     String
+  role        String
+  description String    @db.Text
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean   @default(false)
+  logoUrl     String?
+  stack       String[]
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("experiences")
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contacts")
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  mimeType  String
+  size      Int
+  altText   String?
+  createdAt DateTime @default(now())
+
+  @@map("media")
+}
