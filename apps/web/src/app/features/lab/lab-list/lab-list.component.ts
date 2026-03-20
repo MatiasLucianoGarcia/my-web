@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { SeoService } from '../../../core/services/seo.service';
 import type { ExperimentDto } from '@my-web/shared';
@@ -13,7 +12,7 @@ const STATUS_CONFIG: Record<string, { label: string; class: string }> = {
 
 @Component({
   selector: 'app-lab-list',
-  imports: [RouterLink],
+  imports: [],
   template: `
     <div class="section">
       <div class="container">

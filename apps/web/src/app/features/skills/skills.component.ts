@@ -41,8 +41,8 @@ interface SkillCategory {
                       <div class="flex gap-1">
                         @for (d of [1,2,3,4,5]; track d) {
                           <div class="w-2 h-2 rounded-full transition-colors"
-                               [class.bg-accent]="d <= (skill.level ?? 0)"
-                               [class.bg-border]="d > (skill.level ?? 0)"></div>
+                               [class.bg-accent]="d <= skill.level!"
+                               [class.bg-border]="d > skill.level!"></div>
                         }
                       </div>
                     }
