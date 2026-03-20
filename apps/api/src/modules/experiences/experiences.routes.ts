@@ -47,7 +47,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
   try {
     const data = experienceSchema.partial().parse(req.body);
     const experience = await prisma.experience.update({
-      where: { id: req.params['id'] },
+      where: { id: req.params['id'] as string },
       data: {
         ...data,
         startDate: data.startDate ? new Date(data.startDate) : undefined,
@@ -62,7 +62,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
 // DELETE /api/v1/experiences/:id
 router.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.experience.delete({ where: { id: req.params['id'] } });
+    await prisma.experience.delete({ where: { id: req.params['id'] as string } });
     res.json({ success: true, message: 'Experience deleted' });
   } catch (error) { next(error); }
 });

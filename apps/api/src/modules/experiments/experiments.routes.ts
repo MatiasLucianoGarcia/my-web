@@ -30,7 +30,7 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction): Promis
 // GET /api/v1/experiments/:slug
 router.get('/:slug', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const experiment = await prisma.experiment.findUnique({ where: { slug: req.params['slug'] } });
+    const experiment = await prisma.experiment.findUnique({ where: { slug: req.params['slug'] as string } });
     if (!experiment) throw new AppError(404, 'Experiment not found');
     res.json({ success: true, data: experiment });
   } catch (error) { next(error); }
@@ -50,7 +50,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
   try {
     const data = experimentSchema.partial().parse(req.body);
     const experiment = await prisma.experiment.update({
-      where: { id: req.params['id'] },
+      where: { id: req.params['id'] as string },
       data: { ...data, demoUrl: data.demoUrl || null },
     });
     res.json({ success: true, data: experiment });
@@ -60,7 +60,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
 // DELETE /api/v1/experiments/:id
 router.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.experiment.delete({ where: { id: req.params['id'] } });
+    await prisma.experiment.delete({ where: { id: req.params['id'] as string } });
     res.json({ success: true, message: 'Experiment deleted' });
   } catch (error) { next(error); }
 });

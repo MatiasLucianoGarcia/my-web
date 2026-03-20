@@ -32,7 +32,7 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction): Promis
 // GET /api/v1/projects/:slug
 router.get('/:slug', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const project = await prisma.project.findUnique({ where: { slug: req.params['slug'] } });
+    const project = await prisma.project.findUnique({ where: { slug: req.params['slug'] as string } });
     if (!project) throw new AppError(404, 'Project not found');
     res.json({ success: true, data: project });
   } catch (error) { next(error); }
@@ -54,7 +54,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
   try {
     const data = projectSchema.partial().parse(req.body);
     const project = await prisma.project.update({
-      where: { id: req.params['id'] },
+      where: { id: req.params['id'] as string },
       data: {
         ...data,
         coverImage: data.coverImage || null,
@@ -69,7 +69,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
 // DELETE /api/v1/projects/:id
 router.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.project.delete({ where: { id: req.params['id'] } });
+    await prisma.project.delete({ where: { id: req.params['id'] as string } });
     res.json({ success: true, message: 'Project deleted' });
   } catch (error) { next(error); }
 });

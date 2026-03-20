@@ -129,7 +129,7 @@ router.get('/admin', authenticate, requireAdmin, async (req: Request, res: Respo
 router.get('/:slug', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const post = await prisma.post.findFirst({
-      where: { slug: req.params['slug'], status: PostStatus.PUBLISHED },
+      where: { slug: req.params['slug'] as string, status: PostStatus.PUBLISHED },
       include: {
         author: { select: { id: true, name: true, avatarUrl: true, bio: true } },
         category: true,
@@ -208,22 +208,25 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
 
     // Remove existing tags if tagIds is provided
     if (data.tagIds !== undefined) {
-      await prisma.postTag.deleteMany({ where: { postId: req.params['id'] } });
+      await prisma.postTag.deleteMany({ where: { postId: req.params['id'] as string } });
     }
 
     const post = await prisma.post.update({
-      where: { id: req.params['id'] },
+      where: { id: req.params['id'] as string },
       data: {
-        ...data,
-        coverImage: data.coverImage || null,
-        categoryId: data.categoryId || null,
-        ogImage: data.ogImage || null,
-        ...(readingTime && { readingTime }),
+        ...(data.title && { title: data.title }),
+        ...(data.slug && { slug: data.slug }),
+        ...(data.content && { content: data.content, readingTime }),
+        ...(data.excerpt !== undefined && { excerpt: data.excerpt }),
+        ...(data.status && { status: data.status }),
+        ...(data.featured !== undefined && { featured: data.featured }),
+        ...(data.categoryId !== undefined && { categoryId: data.categoryId || null }),
+        ...(data.coverImage !== undefined && { coverImage: data.coverImage || null }),
+        ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle }),
+        ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription }),
+        ...(data.ogImage !== undefined && { ogImage: data.ogImage || null }),
         ...(data.publishedAt && { publishedAt: new Date(data.publishedAt) }),
-        ...(data.status === PostStatus.PUBLISHED && !data.publishedAt
-          ? { publishedAt: new Date() }
-          : {}),
-        tagIds: undefined,
+        ...(data.status === PostStatus.PUBLISHED && !data.publishedAt ? { publishedAt: new Date() } : {}),
         ...(data.tagIds !== undefined && {
           tags: { create: data.tagIds.map((tagId) => ({ tagId })) },
         }),
@@ -231,7 +234,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
       include: { author: true, category: true, tags: { include: { tag: true } } },
     });
 
-    res.json({ success: true, data: { ...post, tags: post.tags.map((pt) => pt.tag) } });
+    res.json({ success: true, data: { ...post, tags: post.tags.map((pt: { tag: unknown }) => pt.tag) } });
   } catch (error) {
     next(error);
   }
@@ -240,7 +243,7 @@ router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Respons
 // DELETE /api/v1/posts/:id - Admin delete
 router.delete('/:id', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.post.delete({ where: { id: req.params['id'] } });
+    await prisma.post.delete({ where: { id: req.params['id'] as string } });
     res.json({ success: true, message: 'Post deleted' });
   } catch (error) {
     next(error);

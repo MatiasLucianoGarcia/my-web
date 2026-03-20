@@ -31,7 +31,7 @@ router.get('/tags', async (_req: Request, res: Response, next: NextFunction): Pr
 router.post('/tags', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const data = tagSchema.parse(req.body);
-    const tag = await prisma.tag.create({ data });
+    const tag = await prisma.tag.create({ data: { ...data, color: data.color ?? null } });
     res.status(201).json({ success: true, data: tag });
   } catch (error) { next(error); }
 });
@@ -39,7 +39,8 @@ router.post('/tags', authenticate, requireAdmin, async (req: Request, res: Respo
 // DELETE /api/v1/taxonomy/tags/:id
 router.delete('/tags/:id', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.tag.delete({ where: { id: req.params['id'] } });
+    const id = req.params['id'] as string;
+    await prisma.tag.delete({ where: { id } });
     res.json({ success: true, message: 'Tag deleted' });
   } catch (error) { next(error); }
 });
@@ -58,7 +59,7 @@ router.get('/categories', async (_req: Request, res: Response, next: NextFunctio
 router.post('/categories', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const data = categorySchema.parse(req.body);
-    const category = await prisma.category.create({ data });
+    const category = await prisma.category.create({ data: { ...data, description: data.description ?? null } });
     res.status(201).json({ success: true, data: category });
   } catch (error) { next(error); }
 });
@@ -66,7 +67,8 @@ router.post('/categories', authenticate, requireAdmin, async (req: Request, res:
 // DELETE /api/v1/taxonomy/categories/:id
 router.delete('/categories/:id', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.category.delete({ where: { id: req.params['id'] } });
+    const id = req.params['id'] as string;
+    await prisma.category.delete({ where: { id } });
     res.json({ success: true, message: 'Category deleted' });
   } catch (error) { next(error); }
 });

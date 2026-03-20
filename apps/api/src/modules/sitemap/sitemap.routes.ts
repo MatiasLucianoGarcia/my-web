@@ -21,7 +21,7 @@ router.get('/sitemap.xml', async (_req: Request, res: Response): Promise<void> =
   const staticPages = ['', '/about', '/experience', '/skills', '/projects', '/lab', '/blog', '/contact'];
 
   const urls = [
-    ...staticPages.map((p) => ({ loc: `${BASE_URL}${p}`, priority: p === '' ? '1.0' : '0.8' })),
+    ...staticPages.map((p) => ({ loc: `${BASE_URL}${p}`, lastmod: undefined as string | undefined, priority: p === '' ? '1.0' : '0.8' })),
     ...posts.map((p) => ({
       loc: `${BASE_URL}/blog/${p.slug}`,
       lastmod: p.updatedAt.toISOString(),

@@ -40,7 +40,7 @@ router.get('/', authenticate, requireAdmin, async (_req: Request, res: Response,
 // PUT /api/v1/contacts/:id/read - Admin mark as read
 router.put('/:id/read', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    await prisma.contact.update({ where: { id: req.params['id'] }, data: { read: true } });
+    await prisma.contact.update({ where: { id: req.params['id'] as string }, data: { read: true } });
     res.json({ success: true, message: 'Marked as read' });
   } catch (error) { next(error); }
 });
