@@ -1,4 +1,5 @@
 import { prisma } from '../../lib/prisma.js';
+import { sendContactNotification } from './email.service.js';
 
 export interface CreateContactData {
   name: string;
@@ -9,7 +10,13 @@ export interface CreateContactData {
 
 export const ContactsService = {
   async create(data: CreateContactData) {
-    return prisma.contact.create({ data });
+    // 1. Save to DB (source of truth)
+    const contact = await prisma.contact.create({ data });
+
+    // 2. Send email notification (best-effort, won't fail the request)
+    void sendContactNotification(data);
+
+    return contact;
   },
 
   async list() {
@@ -20,3 +27,4 @@ export const ContactsService = {
     return prisma.contact.update({ where: { id }, data: { read: true } });
   },
 };
+

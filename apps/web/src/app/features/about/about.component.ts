@@ -48,8 +48,11 @@ import { SeoService } from '../../core/services/seo.service';
               </p>
               <div class="flex flex-wrap gap-3 pt-2">
                 <a routerLink="/contact" class="btn btn-primary">Get in touch</a>
-                <a routerLink="/cv" class="btn btn-ghost" target="_blank" rel="noopener">
-                  📄 Download CV
+                <a routerLink="/cv" class="btn btn-ghost">
+                  📄 View CV
+                </a>
+                <a href="/cv.pdf" download="Matias-Garcia-CV.pdf" class="btn btn-ghost">
+                  ⬇ Download PDF
                 </a>
               </div>
             </div>
