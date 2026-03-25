@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://TU-API-URL.railway.app/api/v1',
+  apiUrl: 'https://resourceful-empathy-production-6ee2.up.railway.app/api/v1',
 };
