@@ -5,9 +5,10 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import pinoHttp from 'pino-http';
+import { execSync } from 'node:child_process';
 import { getEnv } from './config/env.js';
 import { logger } from './config/logger.js';
-import { connectDB, disconnectDB } from './lib/prisma.js';
+import { prisma, connectDB, disconnectDB } from './lib/prisma.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 // Routes
@@ -87,9 +88,44 @@ app.use('/', sitemapRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-// ─── START ───────────────────────────────────────────────────────────────────
+// ─── DB SETUP: auto-migrate + seed if empty ──────────────────────────────────
+async function ensureDatabase() {
+  // 1. Apply schema to DB (idempotent)
+  try {
+    logger.info('🔄 Running prisma db push...');
+    execSync('npx prisma db push --accept-data-loss', {
+      stdio: 'inherit',
+      env: process.env,
+    });
+    logger.info('✅ Schema synced');
+  } catch (err) {
+    logger.warn({ err }, '⚠️  prisma db push failed — continuing');
+  }
+
+  // 2. Seed only if DB is empty (use upsert so it is safe to re-run)
+  try {
+    const userCount = await prisma.user.count();
+    if (userCount === 0) {
+      logger.info('🌱 Empty DB — running seed...');
+      execSync('npx tsx prisma/seed.ts', {
+        stdio: 'inherit',
+        env: process.env,
+        cwd: process.cwd(),
+      });
+      logger.info('✅ Seed complete');
+    } else {
+      logger.info(`✅ DB has ${userCount} user(s) — skipping seed`);
+    }
+  } catch (err) {
+    logger.warn({ err }, '⚠️  Seed failed — app continues without seed data');
+  }
+}
+
+// ─── BOOTSTRAP ───────────────────────────────────────────────────────────────
 async function bootstrap() {
   await connectDB();
+  await ensureDatabase();
+
   const server = app.listen(env.PORT, () => {
     logger.info(`🚀 API running at http://localhost:${env.PORT}`);
     logger.info(`📋 Health check: http://localhost:${env.PORT}/health`);
