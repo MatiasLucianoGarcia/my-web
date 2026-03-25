@@ -96,6 +96,12 @@ export const routes: Routes = [
           import('./features/contact/contact.component').then((m) => m.ContactComponent),
         title: 'Contact — Matias Garcia',
       },
+      {
+        path: 'cv',
+        loadComponent: () =>
+          import('./features/cv/cv.component').then((m) => m.CvComponent),
+        title: 'CV — Matias Garcia',
+      },
     ],
   },
   {

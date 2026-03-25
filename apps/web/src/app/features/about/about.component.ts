@@ -48,13 +48,8 @@ import { SeoService } from '../../core/services/seo.service';
               </p>
               <div class="flex flex-wrap gap-3 pt-2">
                 <a routerLink="/contact" class="btn btn-primary">Get in touch</a>
-                <a href="https://www.linkedin.com/in/matias-garcia-99bab9170/"
-                   target="_blank" rel="noopener" class="btn btn-ghost">
-                  LinkedIn ↗
-                </a>
-                <a href="https://github.com/MatiasLucianoGarcia"
-                   target="_blank" rel="noopener" class="btn btn-ghost">
-                  GitHub ↗
+                <a routerLink="/cv" class="btn btn-ghost" target="_blank" rel="noopener">
+                  📄 Download CV
                 </a>
               </div>
             </div>

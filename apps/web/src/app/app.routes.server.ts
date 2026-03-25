@@ -10,6 +10,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'lab', renderMode: RenderMode.Prerender },
   { path: 'blog', renderMode: RenderMode.Prerender },
   { path: 'contact', renderMode: RenderMode.Prerender },
+  { path: 'cv', renderMode: RenderMode.Server },
 
 
   // Dynamic routes with params → SSR on demand (can't prerender without knowing params)
