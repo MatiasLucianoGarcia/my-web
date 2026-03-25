@@ -1,155 +1,66 @@
+/**
+ * @deprecated Use feature-specific services instead:
+ * - PostsService     → core/services/posts.service
+ * - ProjectsService  → core/services/projects.service
+ * - ExperimentsService → core/services/experiments.service
+ * - ExperiencesService → core/services/experiences.service
+ * - ContactsService  → core/services/contacts.service
+ * - TaxonomyService  → core/services/taxonomy.service
+ *
+ * This facade is kept for backwards compatibility during migration.
+ */
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import type {
-  PostListItemDto,
-  PostDto,
-  PaginatedResponse,
-  CreatePostDto,
-  UpdatePostDto,
-  PostQueryDto,
-  ProjectDto,
-  CreateProjectDto,
-  UpdateProjectDto,
-  ExperimentDto,
-  CreateExperimentDto,
-  UpdateExperimentDto,
-  ExperienceDto,
-  CreateExperienceDto,
-  UpdateExperienceDto,
-  CategoryDto,
-  TagDto,
-  ContactDto,
-  CreateContactDto,
-  ApiResponse,
-} from '@my-web/shared';
+import { PostsService } from './posts.service';
+import { ProjectsService } from './projects.service';
+import { ExperimentsService } from './experiments.service';
+import { ExperiencesService } from './experiences.service';
+import { ContactsService } from './contacts.service';
+import { TaxonomyService } from './taxonomy.service';
+import type { PostQueryDto, CreatePostDto, UpdatePostDto, CreateProjectDto, UpdateProjectDto, CreateExperimentDto, UpdateExperimentDto, CreateExperienceDto, UpdateExperienceDto, CreateContactDto } from '@my-web/shared';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private readonly http = inject(HttpClient);
-  private readonly base = environment.apiUrl;
+  private readonly posts = inject(PostsService);
+  private readonly projects = inject(ProjectsService);
+  private readonly experiments = inject(ExperimentsService);
+  private readonly experiences = inject(ExperiencesService);
+  private readonly contacts = inject(ContactsService);
+  private readonly taxonomy = inject(TaxonomyService);
 
-  // ─── POSTS ──────────────────────────────────────────────────────────────
+  // Posts
+  getPosts(query: PostQueryDto = {}) { return this.posts.getAll(query); }
+  getAdminPosts(query: PostQueryDto = {}) { return this.posts.getAllAdmin(query); }
+  getPostBySlug(slug: string) { return this.posts.getBySlug(slug); }
+  createPost(data: CreatePostDto) { return this.posts.create(data); }
+  updatePost(id: string, data: UpdatePostDto) { return this.posts.update(id, data); }
+  deletePost(id: string) { return this.posts.delete(id); }
 
-  getPosts(query: PostQueryDto = {}) {
-    let params = new HttpParams();
-    Object.entries(query).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params = params.set(key, String(value));
-      }
-    });
-    return this.http.get<ApiResponse<PaginatedResponse<PostListItemDto>>>(`${this.base}/posts`, { params });
-  }
+  // Projects
+  getProjects() { return this.projects.getAll(); }
+  getProjectBySlug(slug: string) { return this.projects.getBySlug(slug); }
+  createProject(data: CreateProjectDto) { return this.projects.create(data); }
+  updateProject(id: string, data: UpdateProjectDto) { return this.projects.update(id, data); }
+  deleteProject(id: string) { return this.projects.delete(id); }
 
-  getAdminPosts(query: PostQueryDto = {}) {
-    let params = new HttpParams();
-    Object.entries(query).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params = params.set(key, String(value));
-      }
-    });
-    return this.http.get<ApiResponse<PaginatedResponse<PostListItemDto>>>(`${this.base}/posts/admin`, { params });
-  }
+  // Experiments
+  getExperiments() { return this.experiments.getAll(); }
+  getExperimentBySlug(slug: string) { return this.experiments.getBySlug(slug); }
+  createExperiment(data: CreateExperimentDto) { return this.experiments.create(data); }
+  updateExperiment(id: string, data: UpdateExperimentDto) { return this.experiments.update(id, data); }
+  deleteExperiment(id: string) { return this.experiments.delete(id); }
 
-  getPostBySlug(slug: string) {
-    return this.http.get<ApiResponse<PostDto>>(`${this.base}/posts/${slug}`);
-  }
+  // Experiences
+  getExperiences() { return this.experiences.getAll(); }
+  createExperience(data: CreateExperienceDto) { return this.experiences.create(data); }
+  updateExperience(id: string, data: UpdateExperienceDto) { return this.experiences.update(id, data); }
+  deleteExperience(id: string) { return this.experiences.delete(id); }
 
-  createPost(data: CreatePostDto) {
-    return this.http.post<ApiResponse<PostDto>>(`${this.base}/posts`, data);
-  }
+  // Taxonomy
+  getTags() { return this.taxonomy.getTags(); }
+  getCategories() { return this.taxonomy.getCategories(); }
 
-  updatePost(id: string, data: UpdatePostDto) {
-    return this.http.put<ApiResponse<PostDto>>(`${this.base}/posts/${id}`, data);
-  }
-
-  deletePost(id: string) {
-    return this.http.delete<ApiResponse>(`${this.base}/posts/${id}`);
-  }
-
-  // ─── PROJECTS ────────────────────────────────────────────────────────────
-
-  getProjects() {
-    return this.http.get<ApiResponse<ProjectDto[]>>(`${this.base}/projects`);
-  }
-
-  getProjectBySlug(slug: string) {
-    return this.http.get<ApiResponse<ProjectDto>>(`${this.base}/projects/${slug}`);
-  }
-
-  createProject(data: CreateProjectDto) {
-    return this.http.post<ApiResponse<ProjectDto>>(`${this.base}/projects`, data);
-  }
-
-  updateProject(id: string, data: UpdateProjectDto) {
-    return this.http.put<ApiResponse<ProjectDto>>(`${this.base}/projects/${id}`, data);
-  }
-
-  deleteProject(id: string) {
-    return this.http.delete<ApiResponse>(`${this.base}/projects/${id}`);
-  }
-
-  // ─── EXPERIMENTS ─────────────────────────────────────────────────────────
-
-  getExperiments() {
-    return this.http.get<ApiResponse<ExperimentDto[]>>(`${this.base}/experiments`);
-  }
-
-  getExperimentBySlug(slug: string) {
-    return this.http.get<ApiResponse<ExperimentDto>>(`${this.base}/experiments/${slug}`);
-  }
-
-  createExperiment(data: CreateExperimentDto) {
-    return this.http.post<ApiResponse<ExperimentDto>>(`${this.base}/experiments`, data);
-  }
-
-  updateExperiment(id: string, data: UpdateExperimentDto) {
-    return this.http.put<ApiResponse<ExperimentDto>>(`${this.base}/experiments/${id}`, data);
-  }
-
-  deleteExperiment(id: string) {
-    return this.http.delete<ApiResponse>(`${this.base}/experiments/${id}`);
-  }
-
-  // ─── EXPERIENCES ─────────────────────────────────────────────────────────
-
-  getExperiences() {
-    return this.http.get<ApiResponse<ExperienceDto[]>>(`${this.base}/experiences`);
-  }
-
-  createExperience(data: CreateExperienceDto) {
-    return this.http.post<ApiResponse<ExperienceDto>>(`${this.base}/experiences`, data);
-  }
-
-  updateExperience(id: string, data: UpdateExperienceDto) {
-    return this.http.put<ApiResponse<ExperienceDto>>(`${this.base}/experiences/${id}`, data);
-  }
-
-  deleteExperience(id: string) {
-    return this.http.delete<ApiResponse>(`${this.base}/experiences/${id}`);
-  }
-
-  // ─── TAXONOMY ────────────────────────────────────────────────────────────
-
-  getTags() {
-    return this.http.get<ApiResponse<TagDto[]>>(`${this.base}/taxonomy/tags`);
-  }
-
-  getCategories() {
-    return this.http.get<ApiResponse<CategoryDto[]>>(`${this.base}/taxonomy/categories`);
-  }
-
-  // ─── CONTACTS ────────────────────────────────────────────────────────────
-
-  sendContact(data: CreateContactDto) {
-    return this.http.post<ApiResponse>(`${this.base}/contacts`, data);
-  }
-
-  getContacts() {
-    return this.http.get<ApiResponse<ContactDto[]>>(`${this.base}/contacts`);
-  }
-
-  markContactRead(id: string) {
-    return this.http.put<ApiResponse>(`${this.base}/contacts/${id}/read`, {});
-  }
+  // Contacts
+  sendContact(data: CreateContactDto) { return this.contacts.send(data); }
+  getContacts() { return this.contacts.getAll(); }
+  markContactRead(id: string) { return this.contacts.markAsRead(id); }
 }
