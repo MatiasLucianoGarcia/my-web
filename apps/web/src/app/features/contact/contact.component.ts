@@ -154,17 +154,18 @@ export class ContactComponent implements OnInit {
   protected get messageInvalid() { return this.form.get('message')?.invalid && this.form.get('message')?.touched; }
 
   protected readonly contactInfo = [
-    { icon: '📧', label: 'Email', value: 'hello@matiasgarcia.dev', href: 'mailto:hello@matiasgarcia.dev' },
-    { icon: '🐙', label: 'GitHub', value: 'github.com/matiaslucianogarcia', href: 'https://github.com/matiaslucianogarcia' },
-    { icon: '💼', label: 'LinkedIn', value: 'linkedin.com/in/matiaslucianogarcia', href: 'https://linkedin.com/in/matiaslucianogarcia' },
-    { icon: '📍', label: 'Location', value: 'Buenos Aires, Argentina', href: null },
+    { icon: '📧', label: 'Email', value: 'mati.luciano.garcia@gmail.com', href: 'mailto:mati.luciano.garcia@gmail.com' },
+    { icon: '🐙', label: 'GitHub', value: 'github.com/MatiasLucianoGarcia', href: 'https://github.com/MatiasLucianoGarcia' },
+    { icon: '💼', label: 'LinkedIn', value: 'linkedin.com/in/matias-garcia-99bab9170', href: 'https://www.linkedin.com/in/matias-garcia-99bab9170/' },
+    { icon: '📍', label: 'Location', value: 'Bahía Blanca, Buenos Aires, Argentina', href: null },
     { icon: '⏰', label: 'Timezone', value: 'ART (UTC-3)', href: null },
+    { icon: '📱', label: 'Phone', value: '+54 0291 441-1801', href: 'tel:+5402914411801' },
   ];
 
   ngOnInit(): void {
     this.seo.updateSeo({
-      title: 'Contact',
-      description: 'Get in touch for freelance projects, collaborations, or just a friendly conversation.',
+      title: 'Contact — Matias Garcia',
+      description: 'Get in touch with Matias Garcia for freelance projects, full-time positions, or just a friendly conversation.',
     });
   }
 
