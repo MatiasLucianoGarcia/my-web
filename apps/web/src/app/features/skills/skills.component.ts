@@ -3,14 +3,12 @@ import { SeoService } from '../../core/services/seo.service';
 
 interface SkillItem {
   name: string;
-  icon?: string;
   level?: number; // 1-5
 }
 
 interface SkillCategory {
   name: string;
   icon: string;
-  color: string;
   skills: SkillItem[];
 }
 
@@ -22,8 +20,8 @@ interface SkillCategory {
       <div class="container">
         <header class="mb-12">
           <div class="divider mb-4"></div>
-          <h1 class="text-display-md text-text-primary mb-4">Skills & Stack</h1>
-          <p class="text-text-secondary text-lg">Technologies I work with regularly and love using.</p>
+          <h1 class="text-display-md text-text-primary mb-4">Skills &amp; Stack</h1>
+          <p class="text-text-secondary text-lg">Technologies I work with regularly and know deeply.</p>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -55,11 +53,32 @@ interface SkillCategory {
 
         <!-- Tools & Others -->
         <section class="mt-12">
-          <h2 class="text-text-secondary text-sm uppercase tracking-wider font-semibold mb-6">Tools & Workflow</h2>
+          <h2 class="text-text-secondary text-sm uppercase tracking-wider font-semibold mb-6">Tools &amp; Workflow</h2>
           <div class="flex flex-wrap gap-3">
             @for (tool of tools; track tool) {
               <span class="badge badge-muted text-sm">{{ tool }}</span>
             }
+          </div>
+        </section>
+
+        <!-- Languages -->
+        <section class="mt-10">
+          <h2 class="text-text-secondary text-sm uppercase tracking-wider font-semibold mb-6">Languages</h2>
+          <div class="flex flex-wrap gap-4">
+            <div class="card p-4 flex items-center gap-3">
+              <span class="text-2xl">🇦🇷</span>
+              <div>
+                <p class="font-medium text-text-primary text-sm">Spanish</p>
+                <p class="text-text-muted text-xs">Native</p>
+              </div>
+            </div>
+            <div class="card p-4 flex items-center gap-3">
+              <span class="text-2xl">🇺🇸</span>
+              <div>
+                <p class="font-medium text-text-primary text-sm">English</p>
+                <p class="text-text-muted text-xs">Advanced (written) / Intermediate (spoken)</p>
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -73,76 +92,66 @@ export class SkillsComponent implements OnInit {
     {
       name: 'Frontend',
       icon: '🎨',
-      color: 'accent',
       skills: [
         { name: 'Angular', level: 5 },
         { name: 'TypeScript', level: 5 },
-        { name: 'RxJS / Signals', level: 4 },
-        { name: 'TailwindCSS', level: 5 },
+        { name: 'JavaScript', level: 5 },
+        { name: 'RxJS', level: 5 },
+        { name: 'NgRx', level: 4 },
+        { name: 'Angular Elements', level: 4 },
         { name: 'HTML5 / CSS3', level: 5 },
-        { name: 'Web Accessibility', level: 4 },
+        { name: 'React', level: 3 },
       ],
     },
     {
       name: 'Backend',
       icon: '⚙️',
-      color: 'success',
       skills: [
         { name: 'Node.js', level: 5 },
         { name: 'Express', level: 5 },
         { name: 'REST API Design', level: 5 },
-        { name: 'GraphQL', level: 3 },
-        { name: 'WebSockets', level: 3 },
-        { name: 'Microservices', level: 3 },
+        { name: 'Laravel', level: 3 },
       ],
     },
     {
-      name: 'Database',
+      name: 'Databases',
       icon: '🗄️',
-      color: 'warning',
       skills: [
         { name: 'PostgreSQL', level: 5 },
-        { name: 'Prisma ORM', level: 5 },
-        { name: 'Redis', level: 3 },
+        { name: 'MySQL / MariaDB', level: 4 },
         { name: 'MongoDB', level: 3 },
-        { name: 'SQL Optimization', level: 4 },
-        { name: 'Data Modeling', level: 4 },
-      ],
-    },
-    {
-      name: 'DevOps & Infra',
-      icon: '🚀',
-      color: 'accent',
-      skills: [
-        { name: 'Docker', level: 4 },
-        { name: 'GitHub Actions', level: 4 },
-        { name: 'Linux / Bash', level: 4 },
-        { name: 'Nginx', level: 3 },
-        { name: 'Railway / Render', level: 4 },
+        { name: 'Prisma ORM', level: 5 },
       ],
     },
     {
       name: 'Architecture',
       icon: '🏗️',
-      color: 'success',
       skills: [
+        { name: 'Microfrontends', level: 5 },
+        { name: 'Web Components', level: 4 },
+        { name: 'Performance Optimization', level: 4 },
         { name: 'Clean Architecture', level: 4 },
-        { name: 'Domain-Driven Design', level: 3 },
         { name: 'SOLID Principles', level: 5 },
-        { name: 'Design Patterns', level: 4 },
-        { name: 'Monorepos', level: 4 },
       ],
     },
     {
-      name: 'Testing',
-      icon: '🧪',
-      color: 'warning',
+      name: 'Methodologies',
+      icon: '🔄',
       skills: [
-        { name: 'Vitest / Jest', level: 4 },
-        { name: 'Angular Testing Lib', level: 4 },
-        { name: 'Playwright / Cypress', level: 3 },
-        { name: 'TDD', level: 3 },
-        { name: 'Integration Testing', level: 4 },
+        { name: 'Agile / Scrum', level: 5 },
+        { name: 'Kanban', level: 4 },
+        { name: 'CI/CD Workflows', level: 4 },
+        { name: 'Code Reviews', level: 5 },
+      ],
+    },
+    {
+      name: 'DevOps & Infra',
+      icon: '🚀',
+      skills: [
+        { name: 'Docker', level: 4 },
+        { name: 'GitHub Actions', level: 4 },
+        { name: 'Linux / Bash', level: 4 },
+        { name: 'Railway / Render', level: 4 },
       ],
     },
   ];
@@ -154,6 +163,9 @@ export class SkillsComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.seo.updateSeo({ title: 'Skills', description: 'My tech stack: Angular, TypeScript, Node.js, PostgreSQL, and more.' });
+    this.seo.updateSeo({
+      title: 'Skills & Stack — Matias Garcia',
+      description: 'Technical skills: Angular, TypeScript, Node.js, RxJS, NgRx, PostgreSQL, Microfrontends and more.',
+    });
   }
 }

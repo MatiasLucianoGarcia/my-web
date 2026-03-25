@@ -27,13 +27,13 @@ import { DatePipe } from '@angular/common';
 
           <!-- Headline -->
           <h1 class="text-display-xl mb-6 animate-fade-up delay-100">
-            <span class="block text-text-primary">Full Stack</span>
-            <span class="block text-gradient">Engineer</span>
+            <span class="block text-text-primary">Matias Garcia</span>
+            <span class="block text-gradient">Senior Software Engineer</span>
           </h1>
 
           <p class="text-xl text-text-secondary mb-8 max-w-2xl leading-relaxed animate-fade-up delay-200">
-            I build scalable web products with Angular, Node.js & PostgreSQL.
-            Passionate about clean architecture, great DX, and meaningful user experiences.
+            6+ years building scalable web applications with Angular, TypeScript &amp; Node.js.
+            Experienced in enterprise SaaS, fintech integrations and microfrontend architectures.
           </p>
 
           <!-- CTAs -->
@@ -191,8 +191,8 @@ import { DatePipe } from '@angular/common';
             <a routerLink="/contact" class="btn btn-primary px-8 py-3 text-base">
               Get in touch
             </a>
-            <a href="mailto:hello@matiasgarcia.dev" class="btn btn-ghost px-8 py-3 text-base">
-              hello&#64;matiasgarcia.dev
+            <a href="mailto:mati.luciano.garcia@gmail.com" class="btn btn-ghost px-8 py-3 text-base">
+              mati.luciano.garcia&#64;gmail.com
             </a>
           </div>
         </div>
@@ -211,13 +211,13 @@ export class HomeComponent implements OnInit {
 
   protected readonly techStack = [
     'Angular', 'TypeScript', 'Node.js', 'PostgreSQL',
-    'Express', 'Prisma', 'TailwindCSS', 'Docker',
+    'RxJS', 'NgRx', 'Express', 'Microfrontends',
   ];
 
   ngOnInit(): void {
     this.seo.updateSeo({
-      title: 'Matias Garcia — Full Stack Engineer',
-      description: 'Full stack engineer specializing in Angular, Node.js, and PostgreSQL. Open to freelance projects and full-time positions.',
+      title: 'Matias Garcia — Senior Software Engineer',
+      description: 'Senior Software Engineer with 6+ years of experience in Angular, TypeScript and Node.js. Expert in enterprise SaaS, fintech integrations and microfrontend architectures.',
       type: 'website',
     });
 
